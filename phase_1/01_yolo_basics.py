@@ -1,3 +1,5 @@
+# Here in this code we detect all object
+
 import cv2
 from ultralytics import YOLO
 
