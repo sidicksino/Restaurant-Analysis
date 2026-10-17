@@ -34,7 +34,7 @@ while True:
     if not ok:
         break
 
-    result = model(frame, classes=[PERSON_CLASS_ID], conf=CONFIDENCE, verbose=False)[0]
+    result = model(frame, classes=[PERSON_CLASS_ID], conf=CONFIDENCE, verbose=False, device="mps")[0]
     people = remove_duplicates(result.boxes)
 
     # We describe each person by one point: the centre of their box.
