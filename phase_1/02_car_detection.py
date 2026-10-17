@@ -36,14 +36,25 @@ while True:
         confidence = float(box.conf)
 
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        cv2.putText(
-            frame,
-            f"car truck {confidence:.2f}",
-            (x1, y1 - 8),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (0, 255, 0),
-            2,
+        if box.cls == CAR_CLASS_ID:
+            cv2.putText(
+                frame,
+                f"car {confidence:.2f}",
+                (x1, y1 - 8),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.5,
+                (0, 255, 0),
+                2,
+            )
+        else:
+            cv2.putText(
+                frame,
+                f"truck {confidence:.2f}",
+                (x1, y1 - 8),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.5,
+                (0, 255, 0),
+                2,
         )
 
     resized_frame = cv2.resize(frame, DISPLAY_SIZE)
