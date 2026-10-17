@@ -4,7 +4,7 @@ import os
 import cv2
 import numpy as np
 
-VIDEO_PATH = "videos/Cctv Resturant Demo.mp4"
+VIDEO_PATH = "videos/Cctv-Resturant-Demo.mp4"
 TABLES_PATH = "tables.json"         # the areas used to decide if a table is occupied (shown in grey)
 TABLE_TOPS_PATH = "table_tops.json" # the outline of each table top, used only for highlighting
 DISPLAY_SIZE = (960, 540)           # window size (width, height), so the video fits on the screen
@@ -19,14 +19,22 @@ cap.release()
 scale = first_frame.shape[1] / DISPLAY_SIZE[0]
 
 # The occupancy areas, so we can see which table has which name.
-with open(TABLES_PATH) as f:
-    tables = json.load(f)
+tables = {}
+if os.path.exists(TABLES_PATH) and os.path.getsize(TABLES_PATH) > 0:
+    try:
+        with open(TABLES_PATH) as f:
+            tables = json.load(f)
+    except json.JSONDecodeError:
+        tables = {}
 
 # Start from the table tops that are already saved, if there are any.
 table_tops = {}  # table name -> list of [x, y] points
-if os.path.exists(TABLE_TOPS_PATH):
-    with open(TABLE_TOPS_PATH) as f:
-        table_tops = json.load(f)
+if os.path.exists(TABLE_TOPS_PATH) and os.path.getsize(TABLE_TOPS_PATH) > 0:
+    try:
+        with open(TABLE_TOPS_PATH) as f:
+            table_tops = json.load(f)
+    except json.JSONDecodeError:
+        table_tops = {}
 
 current_points = []  # points of the table top being drawn right now
 

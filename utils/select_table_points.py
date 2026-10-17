@@ -4,7 +4,7 @@ import os
 import cv2
 import numpy as np
 
-VIDEO_PATH = "videos/Cctv Resturant Demo.mp4"
+VIDEO_PATH = "videos/Cctv-Resturant-Demo.mp4"
 TABLES_PATH = "tables.json"
 DISPLAY_SIZE = (960, 540)  # window size (width, height), so the video fits on the screen
 WINDOW = "Select table points"
@@ -19,9 +19,12 @@ scale = first_frame.shape[1] / DISPLAY_SIZE[0]
 
 # Start from the tables that are already saved, if there are any.
 tables = {}  # table name -> list of [x, y] points
-if os.path.exists(TABLES_PATH):
-    with open(TABLES_PATH) as f:
-        tables = json.load(f)
+if os.path.exists(TABLES_PATH) and os.path.getsize(TABLES_PATH) > 0:
+    try:
+        with open(TABLES_PATH) as f:
+            tables = json.load(f)
+    except json.JSONDecodeError:
+        tables = {}
 
 current_points = []  # points of the table being drawn right now
 
