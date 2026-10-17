@@ -15,14 +15,15 @@ TABLES_PATH = "tables.json"
 TABLE_TOPS_PATH = "table_tops.json"
 DISPLAY_SIZE = (960, 540)
 PERSON_CLASS_ID = 0
-CONFIDENCE = 0.2        # low on purpose, so half-hidden guests are still found
+CONFIDENCE = 0.2        # low on purpose so half-hidden seated guests are found
 POSE_CONFIDENCE = 0.3
+TOTAL_SEATS = 24        # 6 tables x 4 chairs in the restaurant
+
 RED = (0, 0, 255)       # occupied
 GREEN = (0, 255, 0)     # free
 OCCUPY_SECONDS = 1
 FREE_SECONDS = 1
 
-# 1. Two models: both look at the same frame
 model = YOLO("models/yolo11s.pt")
 pose_model = YOLO("models/yolo11s-pose.pt")
 
@@ -48,7 +49,7 @@ while True:
     result = model(frame, classes=[PERSON_CLASS_ID], conf=CONFIDENCE, verbose=False, device="mps")[0]
     pose_result = pose_model(frame, conf=POSE_CONFIDENCE, verbose=False, device="mps")[0]
 
-    # 2. Standing first: drop people who are standing, then remove duplicates
+    # Filter out standing people (waiters / passersby), then eliminate duplicates
     people = remove_standing(result.boxes, pose_result)
     people = remove_duplicates(people)
 
@@ -61,9 +62,9 @@ while True:
     colors = {}
     counts = {}
     occupied_count = 0
+    total_guests = 0
 
     for name, points in tables.items():
-        # 3. Keep the number of people at the table
         count = people_at_table(points, centers)
         counts[name] = count
 
@@ -75,25 +76,53 @@ while True:
             if empty_frames[name] > free_frames:
                 present_frames[name] = 0
 
+        # Mark table occupied only after someone sits long enough
         if present_frames[name] >= occupy_frames:
             occupied_count += 1
+            total_guests += count
             colors[name] = RED
         else:
             colors[name] = GREEN
 
+    # Highlight table tops with tint
     frame = draw_table_tops(frame, table_tops, colors)
 
-    # Display table name and person count inside each table top
+    # Draw the occupant count in the center of occupied tables
     for name, points in table_tops.items():
-        x, y = np.array(points).mean(axis=0).astype(int)
-        label = f"{name}: {counts[name]}" if colors[name] == RED else name
-        cv2.putText(frame, label, (x - 40, y + 5), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+        if colors[name] == RED and counts[name] > 0:
+            x, y = np.array(points).mean(axis=0).astype(int)
+            cv2.putText(
+                frame,
+                str(counts[name]),
+                (x - 12, y + 10),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                1.0,
+                (255, 255, 255),
+                3,
+            )
 
-    cv2.rectangle(frame, (10, 10), (330, 60), (0, 0, 0), -1)
-    cv2.putText(frame, f"Occupied: {occupied_count} / {len(tables)}", (20, 46),
-                cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 2)
+    # Top-left status HUD banner
+    cv2.rectangle(frame, (10, 10), (320, 90), (0, 0, 0), -1)
+    cv2.putText(
+        frame,
+        f"Occupied: {occupied_count} / {len(tables)} tables",
+        (20, 42),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.8,
+        (255, 255, 255),
+        2,
+    )
+    cv2.putText(
+        frame,
+        f"Guests: {total_guests} / {TOTAL_SEATS} seats",
+        (20, 75),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.8,
+        (255, 255, 255),
+        2,
+    )
 
-    cv2.imshow("Phase 2 - People per table (press Q to quit)", cv2.resize(frame, DISPLAY_SIZE))
+    cv2.imshow("Restaurant Analysis", cv2.resize(frame, DISPLAY_SIZE))
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break
 
