@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TablePulse ⸱ Live Floor</title>
+    <!-- The three fonts of the design. Without internet the page falls back to fonts already on the machine. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/step_1/style.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M3 3h18v18H3zM9 9h6v6H9z" />
+                </svg>
+            </div>
+            <span class="brand-name">TablePulse</span>
+            <span class="live-pill" id="live-pill"><span class="pulse-dot"></span><span
+                    id="live-text">LIVE</span></span>
+        </div>
+    </header>
+
+    <main class="view">
+        <div class="card camera">
+            <div class="camera-head">
+                <div><span class="strong">Dining Room Overview</span> <span class="sub">• {{video}}</span></div>
+                <span class="label plain" id="clock"></span>
+            </div>
+            <div class="viewport" id="viewport">
+                <!-- The server keeps sending new pictures to this one image, which makes it a video. -->
+                <img id="stream" src="/video"
+                    alt="Live camera view of the dining room, with free tables in green and occupied in red.">
+            </div>
+            <div class="camera-foot">
+                <span class="sub">On-device AI</span>
+                <button type="button" class="icon-button" id="fullscreen" title="Fullscreen" aria-label="Fullscreen">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <span>TablePulse Live Floor • {{video}}</span>
+        <span>Open on any device on the same Wi-Fi: <span id="address">{{address}}</span></span>
+    </footer>
+
+    <script src="/step_1/app.js"></script>
+</body>
+
+</html>

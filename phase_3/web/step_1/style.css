@@ -1,0 +1,240 @@
+/* The colours, fonts and sizes of the TablePulse design.
+   Every colour has a name here and is used by that name everywhere below. */
+:root {
+    --surface: #faf8ff;
+    /* page background */
+    --white: #ffffff;
+    /* cards */
+    --surface-low: #f2f3ff;
+    /* footer */
+    --surface-high: #e2e7ff;
+    /* logo tile, empty video */
+    --text: #131b2e;
+    --text-soft: #554336;
+    /* labels */
+    --outline: #887364;
+    /* secondary text */
+    --line: rgba(219, 194, 176, .3);
+    /* borders */
+    --primary: #8d4b00;
+    /* brand colour */
+    --primary-soft: rgba(141, 75, 0, .1);
+    --error-soft: #ffdad6;
+    --error-text: #93000a;
+
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+}
+
+body {
+    background: var(--surface);
+    color: var(--text);
+    font: 400 14px/20px var(--sans);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+/* --------- small building blocks --------- */
+.card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+}
+
+.label {
+    font: 600 10px/14px var(--mono);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.label.plain {
+    text-transform: none;
+    letter-spacing: .06em;
+    color: var(--outline);
+}
+
+.sub {
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--outline);
+}
+
+.strong {
+    font-weight: 600;
+}
+
+.icon-button {
+    border: 0;
+    background: none;
+    padding: 4px;
+    color: var(--text-soft);
+    display: grid;
+    place-items: center;
+}
+
+.icon-button:hover {
+    color: var(--text);
+}
+
+.icon-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* --------- top bar --------- */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 32px;
+    background: rgba(255, 255, 255, .95);
+    backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, .03);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    background: var(--surface-high);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+}
+
+.logo svg {
+    width: 16px;
+    height: 16px;
+}
+
+.brand-name {
+    font: 600 18px/24px var(--serif);
+    letter-spacing: -.01em;
+}
+
+.live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 4px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: var(--primary-soft);
+    color: var(--primary);
+    font: 500 10px/14px var(--mono);
+    letter-spacing: .06em;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s infinite;
+}
+
+.live-pill.offline {
+    background: var(--error-soft);
+    color: var(--error-text);
+}
+
+.live-pill.offline .pulse-dot {
+    animation: none;
+}
+
+@keyframes pulse {
+    50% {
+        opacity: .4;
+    }
+}
+
+/* --------- the camera card --------- */
+.view {
+    flex: 1;
+    width: 100%;
+    padding: 24px 32px;
+}
+
+.card.camera {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.camera-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+.viewport {
+    position: relative;
+    width: 100%;
+    background: var(--surface-high);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.viewport img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.camera-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border-top: 1px solid var(--line);
+}
+
+/* --------- footer --------- */
+.footer {
+    padding: 16px 32px;
+    background: var(--surface-low);
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--outline);
+}
