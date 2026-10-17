@@ -15,7 +15,7 @@ while True:
     if not ok:
         break  # end of the video
 
-    results = model(frame, verbose=False)
+    results = model(frame, verbose=False, device="mps")
     result = results[0]
 
     annotated = result.plot()
