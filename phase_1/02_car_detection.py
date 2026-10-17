@@ -1,13 +1,15 @@
-# Here in this code we are detecting only person
+# Here in this code we are detecting Car and Truck
 
 import cv2
 from ultralytics import YOLO
 
-VIDEO_PATH = "videos/Cctv-Resturant-Demo.mp4"
+VIDEO_PATH = "videos/highway.mp4"
 DISPLAY_SIZE = (960, 540)
 
 # 1. Two settings
-PERSON_CLASS_ID = 0
+CAR_CLASS_ID = 2
+TRUCK_CLASS_ID = 7
+
 CONFIDENCE = 0.3
 
 model = YOLO("models/yolo11l.pt")
@@ -19,10 +21,10 @@ while True:
     if not ok:
         break  # end of the video
 
-    # 2. Ask for people only (use device="mps" if on Apple Silicon Mac)
+    # 2. Ask for car and truck (use device="mps" if on Apple Silicon Mac)
     result = model(
         frame,
-        classes=[PERSON_CLASS_ID],
+        classes=[CAR_CLASS_ID, TRUCK_CLASS_ID],
         conf=CONFIDENCE,
         verbose=False,
         device="mps",
@@ -36,7 +38,7 @@ while True:
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
         cv2.putText(
             frame,
-            f"person {confidence:.2f}",
+            f"car truck {confidence:.2f}",
             (x1, y1 - 8),
             cv2.FONT_HERSHEY_SIMPLEX,
             0.5,
@@ -45,7 +47,7 @@ while True:
         )
 
     resized_frame = cv2.resize(frame, DISPLAY_SIZE)
-    cv2.imshow("Part 2 - People detection (press Q to quit)", resized_frame)
+    cv2.imshow("Part 2 - Car and Truck detection (press Q to quit)", resized_frame)
 
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break
