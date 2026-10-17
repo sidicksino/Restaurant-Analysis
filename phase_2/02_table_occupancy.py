@@ -8,7 +8,7 @@ from ultralytics import YOLO
 from utils.duplicates import remove_duplicates
 from utils.tables import draw_table_tops, people_at_table
 
-VIDEO_PATH = "videos/Cctv Resturant Demo.mp4"
+VIDEO_PATH = "videos/Cctv-Resturant-Demo.mp4"
 TABLES_PATH = "tables.json"           # area around each table, made with utils/select_table_point
 TABLE_TOPS_PATH = "table_tops.json"   # outline of each table top, made with utils/select_table_to
 DISPLAY_SIZE = (960, 540)             # window size (width, height), so the video fits on screen
