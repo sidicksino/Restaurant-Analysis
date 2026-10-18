@@ -1,0 +1,534 @@
+/* The colours, fonts and sizes of the TablePulse design. */
+:root {
+    --surface: #faf8ff;
+    /* page background */
+    --white: #ffffff;
+    /* cards */
+    --surface-low: #f2f3ff;
+    /* footer */
+    --surface-high: #e2e7ff;
+    /* logo tile, empty video */
+    --text: #131b2e;
+    --text-soft: #554336;
+    /* labels */
+    --outline: #887364;
+    /* secondary text */
+    --line: rgba(219, 194, 176, .3);
+    /* borders */
+    --primary: #8d4b00;
+    /* brand colour */
+    --primary-soft: rgba(141, 75, 0, .1);
+    --error-soft: #ffdad6;
+    --error-text: #93000a;
+    --error: #ba1a1a;
+    --success: #2e7d32;
+    --success-soft: #eaf5ec;
+
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+}
+
+body {
+    background: var(--surface);
+    color: var(--text);
+    font: 400 14px/20px var(--sans);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+/* --------- small building blocks --------- */
+.card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.label {
+    font: 600 10px/14px var(--mono);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+}
+
+.label.plain {
+    text-transform: none;
+    letter-spacing: .06em;
+    color: var(--outline);
+}
+
+.sub {
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--outline);
+}
+
+.strong {
+    font-weight: 600;
+}
+
+.serif-title {
+    font: 600 18px/24px var(--serif);
+    letter-spacing: -.01em;
+}
+
+.icon-button {
+    border: 0;
+    background: none;
+    padding: 4px;
+    color: var(--text-soft);
+    display: grid;
+    place-items: center;
+}
+
+.icon-button:hover {
+    color: var(--text);
+}
+
+.icon-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* --------- top bar --------- */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 32px;
+    background: rgba(255, 255, 255, .95);
+    backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, .03);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    background: var(--surface-high);
+    color: var(--primary);
+    display: grid;
+    place-items: center;
+}
+
+.logo svg {
+    width: 16px;
+    height: 16px;
+}
+
+.brand-name {
+    font: 600 18px/24px var(--serif);
+    letter-spacing: -.01em;
+}
+
+.live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 6px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: #faedd8;
+    color: var(--primary);
+    font: 600 11px/14px var(--mono);
+    letter-spacing: .04em;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s infinite;
+}
+
+.live-pill.offline {
+    background: var(--error-soft);
+    color: var(--error-text);
+}
+
+.live-pill.offline .pulse-dot {
+    animation: none;
+}
+
+@keyframes pulse {
+    50% {
+        opacity: .35;
+    }
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.uptime-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font: 500 13px/18px var(--sans);
+    color: var(--outline);
+}
+
+.clock-icon {
+    width: 15px;
+    height: 15px;
+    color: var(--outline);
+}
+
+/* --------- main two-column view --------- */
+.view {
+    flex: 1;
+    width: 100%;
+    padding: 24px 32px;
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 1100px) {
+    .view {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --------- camera card --------- */
+.card.camera {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.camera-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+.viewport {
+    position: relative;
+    width: 100%;
+    background: var(--surface-high);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.viewport img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.camera-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border-top: 1px solid var(--line);
+}
+
+/* --------- dashboard panel (right side) --------- */
+.dashboard-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* --------- 2x2 stats grid --------- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card.stat {
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 104px;
+}
+
+.metric {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin: 2px 0;
+}
+
+.metric .val {
+    font: 700 30px/34px var(--sans);
+    color: var(--text);
+    letter-spacing: -.02em;
+}
+
+.metric .metric-sub {
+    font-size: 13px;
+    color: var(--outline);
+    font-weight: 500;
+}
+
+/* --------- floor plan card --------- */
+.card.floor-plan-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.floor-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+.floor-title {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.legend {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 12px;
+    color: var(--outline);
+}
+
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.legend-box.free {
+    border: 2px solid var(--success);
+    background: var(--success-soft);
+}
+
+.legend-box.occupied {
+    border: 2px solid var(--error);
+    background: var(--error-soft);
+}
+
+.legend-pill.taken {
+    width: 14px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--error);
+    display: inline-block;
+}
+
+/* Blueprint grid container */
+.floor-blueprint {
+    padding: 28px 20px;
+    background-color: var(--white);
+    background-image: 
+        linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+    background-size: 20px 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px 16px;
+    justify-items: center;
+    align-items: center;
+    min-height: 250px;
+}
+
+/* Table element & seats */
+.table-wrapper {
+    position: relative;
+    width: 76px;
+    height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.table-shape {
+    width: 68px;
+    height: 68px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-width: 2px;
+    border-style: solid;
+    transition: all 0.25s ease;
+    cursor: default;
+    user-select: none;
+}
+
+.table-shape.square {
+    border-radius: 12px;
+}
+
+.table-shape.round {
+    border-radius: 50%;
+}
+
+/* Free table */
+.table-shape.free {
+    border-color: var(--success);
+    background: #f1f8f3;
+    color: #1b5e20;
+}
+
+.table-shape.free .table-num {
+    font: 700 14px/16px var(--mono);
+    color: #1b5e20;
+}
+
+.table-shape.free .table-status {
+    font: 500 11px/14px var(--sans);
+    color: #2e7d32;
+    margin-top: 2px;
+}
+
+/* Occupied table */
+.table-shape.occupied {
+    border-color: var(--error);
+    background: var(--error-soft);
+    color: var(--error-text);
+}
+
+.table-shape.occupied .table-num {
+    font: 700 13px/15px var(--mono);
+    color: var(--error-text);
+}
+
+.table-shape.occupied .table-status {
+    font: 600 11px/13px var(--mono);
+    color: var(--error);
+    margin-top: 1px;
+}
+
+.table-shape.occupied .table-time {
+    font: 500 10px/12px var(--mono);
+    color: var(--error-text);
+    margin-top: 1px;
+}
+
+/* Seat pills around table */
+.seat {
+    position: absolute;
+    background: var(--surface-high);
+    border-radius: 4px;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.seat.top {
+    top: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 6px;
+}
+
+.seat.bottom {
+    bottom: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 6px;
+}
+
+.seat.left {
+    left: -9px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 22px;
+}
+
+.seat.right {
+    right: -9px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 22px;
+}
+
+.seat.taken {
+    background: var(--error) !important;
+}
+
+/* --------- footer --------- */
+.footer {
+    padding: 16px 32px;
+    background: var(--surface-low);
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--outline);
+    margin-top: auto;
+}
+
+@media (max-width: 650px) {
+    .footer {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+}
