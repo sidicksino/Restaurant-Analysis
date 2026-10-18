@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TablePulse ⸱ Live Floor & History</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/step_3/style.css">
+</head>
+
+<body>
+
+    <header class="topbar">
+        <div class="topbar-left">
+            <div class="brand">
+                <div class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M3 3h18v18H3zM9 9h6v6H9z" />
+                    </svg>
+                </div>
+                <span class="brand-name">TablePulse</span>
+                <span class="live-pill" id="live-pill"><span class="pulse-dot"></span><span id="live-text">Live 30fps</span></span>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="nav-tabs" aria-label="Main Navigation">
+                <a href="#floor" class="nav-tab active" id="tab-floor">Live Floor</a>
+                <a href="#history" class="nav-tab" id="tab-history">History</a>
+            </nav>
+        </div>
+
+        <div class="header-right">
+            <span class="uptime-badge" id="uptime-container">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="clock-icon">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <span id="uptime-text">Running: 0s</span>
+            </span>
+        </div>
+    </header>
+
+    <!-- VIEW 1: Live Floor -->
+    <main class="view view-floor" id="view-floor">
+        <div class="card camera">
+            <div class="camera-head">
+                <div>
+                    <span class="strong">Dining Room Overview</span>
+                    <span class="sub">• <span id="camera-video-name">Cctv Resturant Demo.mp4</span></span>
+                </div>
+                <span class="label plain" id="clock">12:00:00</span>
+            </div>
+            <div class="viewport" id="viewport">
+                <img id="stream" src="/video"
+                    alt="Live camera view of the dining room, with free tables in green and occupied in red.">
+            </div>
+            <div class="camera-foot">
+                <span class="sub">On-device AI</span>
+                <button type="button" class="icon-button" id="fullscreen" title="Fullscreen" aria-label="Fullscreen">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="dashboard-panel">
+            <div class="stats-grid">
+                <div class="card stat">
+                    <span class="label">OCCUPIED TABLES</span>
+                    <div class="metric">
+                        <span class="val" id="stat-occupied">0</span>
+                        <span class="metric-sub">of <span id="stat-total-tables">6</span> tables</span>
+                    </div>
+                    <span class="sub" id="stat-walkins">6 available for walk-ins</span>
+                </div>
+
+                <div class="card stat">
+                    <span class="label">GUESTS SEATED</span>
+                    <div class="metric">
+                        <span class="val" id="stat-guests">0</span>
+                        <span class="metric-sub">/ <span id="stat-total-seats">24</span> covers</span>
+                    </div>
+                    <span class="sub" id="stat-capacity">0% dining capacity</span>
+                </div>
+
+                <div class="card stat">
+                    <span class="label">SEAT UTILIZATION</span>
+                    <div class="metric">
+                        <span class="val" id="stat-utilization">0%</span>
+                    </div>
+                    <span class="sub" id="stat-seats-free">24 seats free</span>
+                </div>
+
+                <div class="card stat">
+                    <span class="label">AVG SEATED TIME</span>
+                    <div class="metric">
+                        <span class="val" id="stat-avg-time">0</span>
+                        <span class="metric-sub" id="stat-avg-unit">sec</span>
+                    </div>
+                    <span class="sub" id="stat-longest">No occupied tables</span>
+                </div>
+            </div>
+
+            <div class="card floor-plan-card">
+                <div class="floor-head">
+                    <div class="floor-title">
+                        <span class="serif-title">Floor Plan</span>
+                        <span class="sub">(<span id="fp-table-count">6</span> tables)</span>
+                    </div>
+                    <div class="legend">
+                        <span class="legend-item"><span class="legend-box free"></span>Free</span>
+                        <span class="legend-item"><span class="legend-box occupied"></span>Occupied</span>
+                        <span class="legend-item"><span class="legend-pill taken"></span>Seat taken</span>
+                    </div>
+                </div>
+
+                <div class="floor-blueprint" id="floor-blueprint">
+                    <!-- Populated dynamically by app.js -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- VIEW 2: History (from SQLite database) -->
+    <main class="view view-history" id="view-history" style="display: none;">
+        <div class="history-page-header">
+            <h1 class="serif-title history-title">History</h1>
+            <span class="sub" id="history-summary">Saved in the database: 0 visits and 0 snapshots</span>
+        </div>
+
+        <div class="history-grid">
+            <!-- Left Column: Charts -->
+            <div class="history-column">
+                <!-- Guests Seated Chart Card -->
+                <div class="card chart-card">
+                    <div class="card-head">
+                        <span class="strong">Guests Seated</span>
+                        <div class="range-selector" id="range-selector">
+                            <button type="button" class="range-btn active" data-range="5m">5 min</button>
+                            <button type="button" class="range-btn" data-range="1h">1 hour</button>
+                            <button type="button" class="range-btn" data-range="24h">24 hours</button>
+                            <button type="button" class="range-btn" data-range="all">All</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <div class="chart-container" id="chart-guests-container">
+                            <svg id="chart-guests" class="history-chart" viewBox="0 0 540 220" preserveAspectRatio="none">
+                                <!-- SVG area & step line rendered dynamically -->
+                            </svg>
+                            <div class="chart-tooltip" id="tooltip-guests"></div>
+                        </div>
+                        <div class="chart-x-axis">
+                            <span id="chart-x-start">5m 0s ago</span>
+                            <span>now</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Occupied Tables Chart Card -->
+                <div class="card chart-card">
+                    <div class="card-head">
+                        <span class="strong">Occupied Tables</span>
+                        <span class="sub" id="occupied-chart-range-label">Last 5 min</span>
+                    </div>
+                    <div class="chart-wrapper">
+                        <div class="chart-container" id="chart-tables-container">
+                            <svg id="chart-tables" class="history-chart" viewBox="0 0 540 220" preserveAspectRatio="none">
+                                <!-- SVG area & step line rendered dynamically -->
+                            </svg>
+                            <div class="chart-tooltip" id="tooltip-tables"></div>
+                        </div>
+                        <div class="chart-x-axis">
+                            <span id="chart-tables-x-start">5m 0s ago</span>
+                            <span>now</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Tables Summary & Recent Visits -->
+            <div class="history-column">
+                <!-- Tables Summary Card -->
+                <div class="card table-card">
+                    <div class="card-head">
+                        <span class="strong">Tables</span>
+                        <span class="sub">All saved visits</span>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="data-table" id="table-summary">
+                            <thead>
+                                <tr>
+                                    <th>TABLE</th>
+                                    <th>VISITS</th>
+                                    <th>AVG TIME</th>
+                                    <th>LONGEST</th>
+                                    <th>AVG GUESTS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-summary-body">
+                                <tr>
+                                    <td colspan="5" class="empty-state">No visits recorded yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Visits Card -->
+                <div class="card table-card">
+                    <div class="card-head">
+                        <span class="strong">Recent Visits</span>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="data-table" id="table-recent">
+                            <thead>
+                                <tr>
+                                    <th>ENDED</th>
+                                    <th>TABLE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-recent-body">
+                                <tr>
+                                    <td colspan="2" class="empty-state">No completed visits recorded yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <span>TablePulse Live Floor • <span id="footer-video">Cctv Resturant Demo.mp4</span></span>
+        <span>Open on any device on the same Wi-Fi: <span id="footer-address">http://localhost:8000</span></span>
+    </footer>
+
+    <script src="/step_3/app.js"></script>
+</body>
+
+</html>

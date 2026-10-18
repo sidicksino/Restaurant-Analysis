@@ -81,8 +81,8 @@ def run_pipeline(video_path, settings=DEFAULT_SETTINGS):
         up_frames = max(1, int(settings["up_seconds"] * fps))
         down_frames = max(1, int(settings["down_seconds"] * fps))
 
-        result = model(frame, classes=[PERSON_CLASS_ID], conf=settings["confidence"], verbose=False)[0]
-        pose_result = pose_model(frame, conf=settings["pose_confidence"], verbose=False)[0]
+        result = model(frame, classes=[PERSON_CLASS_ID], conf=settings["confidence"], verbose=False, device="mps")[0]
+        pose_result = pose_model(frame, conf=settings["pose_confidence"], verbose=False, device="mps")[0]
 
         # Drop the people who are standing (waiters, people walking past), then the duplicates.
         people = remove_standing(result.boxes, pose_result)
